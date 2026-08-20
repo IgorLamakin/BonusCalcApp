@@ -9,7 +9,8 @@
         "start": "electron .",
         "icon": "node process-logo.js",
         "icon-default": "node make-icon.js",
-        "dist": "electron-builder"
+        "dist": "electron-builder",
+        "dist-portable": "electron-builder --win portable --config.win.signAndEditExecutable=false --config.portable.artifactName=\"BonusCalc-Portable-${version}-${arch}.${ext}\""
     },
     "devDependencies": {
         "electron": "^25.9.8",
