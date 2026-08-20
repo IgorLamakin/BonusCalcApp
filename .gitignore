@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Log files
+*.log
+
+# User settings
+history.json
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/lua-language-server*
+
+# Electron build artifacts
+*.dmg
+*.exe
+*.msi
+*.app
+*.AppImage
+*.deb
+*.rpm
+
+# Temporary files
+*.tmp
+*.temp
+
+# Local junk files
+background.jpg
+*backup*.exe
+*.rar
+*.7z
+*.zip
+
+# Local configs
+.opencode/
+opencode.jsonc

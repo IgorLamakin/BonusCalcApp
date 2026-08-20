@@ -1,0 +1,58 @@
+{
+    "name": "raschet-rentabelnosti",
+    "version": "2.0.0",
+    "description": "Приложение для расчета премии и рентабельности сделки",
+    "main": "main.js",
+    "author": "BonusCalc",
+    "license": "MIT",
+    "scripts": {
+        "start": "electron .",
+        "icon": "node process-logo.js",
+        "icon-default": "node make-icon.js",
+        "dist": "electron-builder"
+    },
+    "devDependencies": {
+        "electron": "^25.9.8",
+        "electron-builder": "^26.15.3"
+    },
+    "dependencies": {
+        "exceljs": "^4.4.0",
+        "pdfkit": "^0.19.1"
+    },
+    "build": {
+        "appId": "com.bonuscalc.app",
+        "productName": "Расчет рентабельности",
+        "directories": {
+            "output": "dist",
+            "buildResources": "build"
+        },
+        "files": [
+            "**/*",
+            "!dist/*",
+            "!*.log"
+        ],
+        "win": {
+            "target": [
+                {
+                    "target": "nsis",
+                    "arch": [
+                        "x64"
+                    ]
+                }
+            ],
+            "icon": "build/icon.ico",
+            "artifactName": "BonusCalc-Setup-${version}-${arch}.${ext}"
+        },
+        "nsis": {
+            "oneClick": false,
+            "perMachine": false,
+            "allowToChangeInstallationDirectory": true,
+            "createDesktopShortcut": "always",
+            "createStartMenuShortcut": true,
+            "shortcutName": "Расчет рентабельности",
+            "uninstallDisplayName": "Расчет рентабельности",
+            "installerIcon": "build/icon.ico",
+            "uninstallerIcon": "build/icon.ico"
+        }
+    }
+}
