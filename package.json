@@ -1,36 +1,75 @@
 {
-    "name": "raschet-rentabelnosti",
-    "version": "2.0.0",
-    "description": "Приложение для расчета премии и рентабельности сделки",
+    "name": "bonus-calc",
+    "version": "2.1.0",
+    "description": "Настольный калькулятор премии и рентабельности сделки",
     "main": "main.js",
     "author": "BonusCalc",
     "license": "MIT",
+    "private": true,
+    "engines": {
+        "node": ">=20"
+    },
     "scripts": {
         "start": "electron .",
-        "icon": "node process-logo.js",
-        "icon-default": "node make-icon.js",
+        "smoke": "electron . --smoke",
+        "test": "node --test \"test/**/*.test.js\"",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "format": "prettier --write \"**/*.{js,json,css,html,md}\"",
+        "format:check": "prettier --check \"**/*.{js,json,css,html,md}\"",
+        "check": "npm run lint && npm run test",
+        "icon": "node scripts/process-logo.js",
+        "icon-default": "node scripts/make-icon.js",
+        "predist": "node scripts/process-logo.js",
         "dist": "electron-builder",
-        "dist-portable": "electron-builder --win portable --config.win.signAndEditExecutable=false --config.portable.artifactName=\"BonusCalc-Portable-${version}-${arch}.${ext}\""
+        "predist-portable": "node scripts/process-logo.js",
+        "dist-portable": "electron-builder --win portable",
+        "build:dir": "electron-builder --dir"
     },
     "devDependencies": {
-        "electron": "^25.9.8",
-        "electron-builder": "^26.15.3"
+        "@eslint/js": "^10.0.1",
+        "electron": "^45.2.3",
+        "electron-builder": "^26.15.3",
+        "eslint": "^10.14.0",
+        "globals": "^17.14.0",
+        "prettier": "^3.9.10"
     },
     "dependencies": {
         "exceljs": "^4.4.0",
         "pdfkit": "^0.19.1"
     },
+    "overrides": {
+        "brace-expansion@1": "1.1.21",
+        "brace-expansion@2": "2.1.7",
+        "uuid": "11.1.1"
+    },
     "build": {
         "appId": "com.bonuscalc.app",
-        "productName": "Расчет рентабельности",
+        "productName": "Калькулятор премии",
         "directories": {
             "output": "dist",
             "buildResources": "build"
         },
         "files": [
-            "**/*",
-            "!dist/*",
-            "!*.log"
+            "main.js",
+            "preload.js",
+            "index.html",
+            "styles.css",
+            "app.js",
+            "font.ttf",
+            "LICENSE",
+            "LICENSES/**/*",
+            "assets/**/*",
+            "src/**/*.js",
+            "!src/main/smoke.js",
+            "!**/*.map",
+            "!**/.yarn/**",
+            "!**/.yarnrc.yml",
+            "!**/node_modules/pdfkit/js/pdfkit.standalone.js",
+            "!**/*.md",
+            "!**/*.ts",
+            "!**/test/**",
+            "!**/tests/**"
         ],
         "win": {
             "target": [
@@ -44,16 +83,20 @@
             "icon": "build/icon.ico",
             "artifactName": "BonusCalc-Setup-${version}-${arch}.${ext}"
         },
+        "portable": {
+            "artifactName": "BonusCalc-Portable-${version}-${arch}.${ext}"
+        },
         "nsis": {
             "oneClick": false,
             "perMachine": false,
             "allowToChangeInstallationDirectory": true,
             "createDesktopShortcut": "always",
             "createStartMenuShortcut": true,
-            "shortcutName": "Расчет рентабельности",
-            "uninstallDisplayName": "Расчет рентабельности",
+            "shortcutName": "Калькулятор премии",
+            "uninstallDisplayName": "Калькулятор премии",
             "installerIcon": "build/icon.ico",
-            "uninstallerIcon": "build/icon.ico"
+            "uninstallerIcon": "build/icon.ico",
+            "deleteAppDataOnUninstall": false
         }
     }
 }

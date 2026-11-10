@@ -1,34 +1,40 @@
-# Dependencies
+# Зависимости
 node_modules/
 
-# Build output
+# Результаты сборки и сгенерированные иконки
 dist/
 build/
+*.tsbuildinfo
 
-# OS files
+# Служебные файлы ОС
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# Log files
+# Логи и временные файлы
 *.log
+*.tmp
+*.temp
+.eslintcache
 
-# User settings
+# Пользовательские данные приложения (на всякий случай)
 history.json
+settings.json
 
-# Environment variables
+# Переменные окружения
 .env
-.env.local
+.env.*
+!.env.example
 
-# IDE
+# Редакторы
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-!.vscode/lua-language-server*
+.idea/
 
-# Electron build artifacts
+# Артефакты Electron и архивы (не коммитим собранное)
 *.dmg
 *.exe
 *.msi
@@ -36,18 +42,10 @@ history.json
 *.AppImage
 *.deb
 *.rpm
-
-# Temporary files
-*.tmp
-*.temp
-
-# Local junk files
-background.jpg
-*backup*.exe
 *.rar
 *.7z
 *.zip
 
-# Local configs
+# Локальная конфигурация ИИ-ассистента (не относится к приложению)
 .opencode/
 opencode.jsonc

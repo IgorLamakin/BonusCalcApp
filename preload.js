@@ -1,20 +1,31 @@
+'use strict';
+
+/**
+ * Безопасный мост между интерфейсом и главным процессом.
+ * Рендерер не получает доступ к Node.js — только перечисленные вызовы.
+ */
+
 const { contextBridge, ipcRenderer } = require('electron');
 
-// Безопасный мост между интерфейсом (рендерером) и main-процессом.
-// Рендерер НЕ получает доступ к Node API напрямую (contextIsolation:true).
-// Здесь перечислены ТОЛЬКО те каналы, которые нужны интерфейсу.
+const invoke = (channel, payload) => ipcRenderer.invoke(channel, payload);
+
 contextBridge.exposeInMainWorld('api', {
+  // Служебное
+  appInfo: () => invoke('app:info'),
+  openDataFolder: () => invoke('app:open-data-folder'),
+
+  // Настройки (ставки налогов, процент премии, последняя папка)
+  settingsLoad: () => invoke('settings:load'),
+  settingsSave: (patch) => invoke('settings:save', patch),
+
   // История расчётов
-  historyLoad: () => ipcRenderer.invoke('history:load'),
-  historyAdd: (entry) => ipcRenderer.invoke('history:add', entry),
-  historyRemove: (id) => ipcRenderer.invoke('history:remove', id),
-  historyClear: () => ipcRenderer.invoke('history:clear'),
+  historyLoad: () => invoke('history:load'),
+  historyAdd: (inputs) => invoke('history:add', inputs),
+  historyRemove: (id) => invoke('history:remove', id),
+  historyClear: () => invoke('history:clear'),
+  historyExportCsv: () => invoke('history:export-csv'),
 
-  // Экспорт файлов (возвращают {ok, msg})
-  exportExcel: (data) => ipcRenderer.invoke('save-excel', data),
-  exportPdf: (data) => ipcRenderer.invoke('save-pdf', data),
-
-  // Настройки (ставки налогов)
-  settingsLoad: () => ipcRenderer.invoke('settings:load'),
-  settingsSave: (settings) => ipcRenderer.invoke('settings:save', settings)
+  // Экспорт отчётов (возвращают { ok, msg, path })
+  exportExcel: (inputs) => invoke('export:excel', inputs),
+  exportPdf: (inputs) => invoke('export:pdf', inputs)
 });

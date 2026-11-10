@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Проверки и сборка
+    runs-on: windows-latest
+
+    steps:
+      - name: Получить код
+        uses: actions/checkout@v4
+
+      - name: Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Установить зависимости
+        run: npm ci
+
+      - name: Проверка формата
+        run: npm run format:check
+
+      - name: Линтер
+        run: npm run lint
+
+      - name: Тесты
+        run: npm test
+
+      - name: Сгенерировать иконки
+        run: npm run icon
+
+      - name: Собрать приложение (без установщика)
+        run: npm run build:dir
+
+      - name: Сохранить собранное приложение
+        uses: actions/upload-artifact@v4
+        with:
+          name: bonus-calc-win-unpacked
+          path: dist/win-unpacked
+          retention-days: 14
