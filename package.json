@@ -21,9 +21,11 @@
         "icon": "node scripts/process-logo.js",
         "icon-default": "node scripts/make-icon.js",
         "predist": "node scripts/process-logo.js",
-        "dist": "electron-builder",
+        "dist": "electron-builder --publish never",
         "predist-portable": "node scripts/process-logo.js",
-        "dist-portable": "electron-builder --win portable",
+        "dist-portable": "electron-builder --win portable --publish never",
+        "dist:all": "npm run dist-portable && npm run dist",
+        "release": "node scripts/publish-release.js",
         "build:dir": "electron-builder --dir"
     },
     "devDependencies": {
@@ -35,6 +37,7 @@
         "prettier": "^3.9.10"
     },
     "dependencies": {
+        "electron-updater": "^6.8.11",
         "exceljs": "^4.4.0",
         "pdfkit": "^0.19.1"
     },
@@ -50,6 +53,14 @@
             "output": "dist",
             "buildResources": "build"
         },
+        "publish": [
+            {
+                "provider": "github",
+                "owner": "IgorLamakin",
+                "repo": "BonusCalcApp",
+                "releaseType": "release"
+            }
+        ],
         "files": [
             "main.js",
             "preload.js",

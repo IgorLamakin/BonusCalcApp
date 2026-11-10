@@ -27,5 +27,16 @@ contextBridge.exposeInMainWorld('api', {
 
   // Экспорт отчётов (возвращают { ok, msg, path })
   exportExcel: (inputs) => invoke('export:excel', inputs),
-  exportPdf: (inputs) => invoke('export:pdf', inputs)
+  exportPdf: (inputs) => invoke('export:pdf', inputs),
+
+  // Автообновление
+  updateState: () => invoke('update:state'),
+  updateCheck: (options) => invoke('update:check', options),
+  updateDownload: () => invoke('update:download'),
+  updateInstall: () => invoke('update:install'),
+  onUpdateStatus: (callback) => {
+    const listener = (_event, payload) => callback(payload);
+    ipcRenderer.on('update:status', listener);
+    return () => ipcRenderer.removeListener('update:status', listener);
+  }
 });

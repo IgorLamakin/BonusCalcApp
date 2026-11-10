@@ -37,6 +37,9 @@ const SCENARIO = `(async () => {
   const logoImage = byId('logoImg');
   result.features.logoLoaded = Boolean(logoImage && logoImage.complete && logoImage.naturalWidth > 0);
 
+  const updateState = await window.api.updateState();
+  result.update = updateState && updateState.view ? updateState.view : null;
+
   setValue('companyName', 'ООО «Смоук»');
   setValue('revenue', '1 200 000');
   setValue('purchase', '600000');
@@ -141,6 +144,13 @@ async function runSmokeTest(win) {
     );
     check('стили: заливка слайдера работает', ui.features.sliderGradient, null);
     check('интерфейс: логотип загрузился (CSP не блокирует)', ui.features.logoLoaded, null);
+    check(
+      'обновления: в режиме разработки корректно отключены',
+      Boolean(ui.update) &&
+        ui.update.visible === false &&
+        /установленной/.test(ui.update.toast || ''),
+      ui.update && ui.update.toast
+    );
     check(
       'стили: ползунок перекрашивается из JS',
       ui.slider.background === true,

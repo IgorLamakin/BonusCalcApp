@@ -24,6 +24,23 @@
                 <span class="version" id="versionLabel"></span>
             </header>
 
+            <div class="update-banner" id="updateBanner" hidden role="status" aria-live="polite">
+                <span class="update-text" id="updateText"></span>
+                <span class="update-actions">
+                    <button type="button" class="ghost-btn accent" id="updateAction" hidden>
+                        Обновить
+                    </button>
+                    <button
+                        type="button"
+                        class="ghost-btn"
+                        id="updateDismiss"
+                        aria-label="Скрыть уведомление об обновлении"
+                    >
+                        ×
+                    </button>
+                </span>
+            </div>
+
             <div class="tabs" role="tablist" aria-label="Режим расчёта">
                 <button
                     type="button"
@@ -331,6 +348,10 @@
 
             <footer class="app-footer">
                 <button type="button" class="link-btn" id="btnOpenData">Папка с данными</button>
+                <span class="dot" aria-hidden="true">·</span>
+                <button type="button" class="link-btn" id="btnCheckUpdates">
+                    Проверить обновления
+                </button>
                 <span class="dot" aria-hidden="true">·</span>
                 <span id="footerVersion">—</span>
             </footer>

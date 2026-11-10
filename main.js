@@ -17,6 +17,7 @@ const path = require('path');
 const { createStores } = require('./src/main/appData');
 const { registerIpcHandlers } = require('./src/main/ipc');
 const { createMainWindow, buildApplicationMenu } = require('./src/main/window');
+const { createUpdater } = require('./src/main/updater');
 
 const APP_ID = 'com.bonuscalc.app';
 const APP_NAME = 'Калькулятор премии';
@@ -69,6 +70,10 @@ async function bootstrap() {
   stores = createStores(app.getPath('userData'));
   Menu.setApplicationMenu(buildApplicationMenu(!app.isPackaged));
 
+  // Автообновление поднимаем до создания окна, чтобы интерфейс сразу мог
+  // узнать его состояние (и не получить «нет обработчика»).
+  const updater = createUpdater({ getWindow: () => mainWindow });
+
   mainWindow = createMainWindow({
     stores,
     isDev: !app.isPackaged,
@@ -85,6 +90,8 @@ async function bootstrap() {
     const { runSmokeTest } = require('./src/main/smoke');
     const passed = await runSmokeTest(mainWindow);
     app.exit(passed ? 0 : 1);
+  } else {
+    updater.scheduleStartupCheck();
   }
 }
 

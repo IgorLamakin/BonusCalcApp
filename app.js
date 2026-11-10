@@ -96,6 +96,29 @@
     toastTimer = setTimeout(() => node.classList.remove('show'), kind === 'error' ? 4500 : 2600);
   }
 
+  // --- Обновление приложения -------------------------------------------------
+
+  let updateView = null;
+
+  function renderUpdate(view) {
+    updateView = view && typeof view === 'object' ? view : null;
+
+    const banner = byId('updateBanner');
+    const text = byId('updateText');
+    const action = byId('updateAction');
+    if (!banner) return;
+
+    const visible = Boolean(updateView && updateView.visible);
+    banner.hidden = !visible;
+    if (visible && text) text.textContent = updateView.text || '';
+
+    if (action) {
+      const hasAction = Boolean(updateView && updateView.action);
+      action.hidden = !hasAction;
+      if (hasAction) action.textContent = updateView.actionLabel || 'Обновить';
+    }
+  }
+
   // --- Общие помощники -------------------------------------------------------
 
   function paintSlider(range) {
@@ -619,6 +642,31 @@
       }
     });
 
+    byId('updateDismiss').addEventListener('click', () => {
+      const banner = byId('updateBanner');
+      if (banner) banner.hidden = true;
+    });
+
+    byId('updateAction').addEventListener('click', async () => {
+      if (!updateView || !updateView.action) return;
+      try {
+        if (updateView.action === 'download') await bridge.updateDownload();
+        else if (updateView.action === 'install') await bridge.updateInstall();
+      } catch {
+        toast('Не удалось выполнить действие обновления', 'error');
+      }
+    });
+
+    byId('btnCheckUpdates').addEventListener('click', async () => {
+      try {
+        const result = await bridge.updateCheck({ manual: true });
+        renderUpdate(result && result.view);
+        if (result && result.view && result.view.toast) toast(result.view.toast);
+      } catch {
+        toast('Не удалось проверить обновления', 'error');
+      }
+    });
+
     document.addEventListener('keydown', (event) => {
       if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
         const panel = state.panels[state.active];
@@ -683,6 +731,16 @@
     } catch {
       renderHistory([]);
       toast('Не удалось загрузить историю расчётов', 'error');
+    }
+
+    if (bridge.onUpdateStatus) {
+      bridge.onUpdateStatus((payload) => renderUpdate(payload && payload.view));
+    }
+    try {
+      const updateStatus = await bridge.updateState();
+      renderUpdate(updateStatus && updateStatus.view);
+    } catch {
+      /* автообновление не критично */
     }
 
     for (const panel of Object.values(state.panels)) paintSlider(panel.bonusRange);
