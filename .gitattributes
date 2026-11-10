@@ -1,0 +1,10 @@
+# Единые переводы строк во всех текстовых файлах (важно для Prettier в CI)
+* text=auto eol=lf
+
+*.png binary
+*.ico binary
+*.jpg binary
+*.jpeg binary
+*.ttf binary
+*.exe binary
+*.dll binary
