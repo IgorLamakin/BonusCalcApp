@@ -6,7 +6,8 @@
 ![Version](https://img.shields.io/badge/version-2.1.0-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11-lightgrey)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Tests](https://img.shields.io/badge/tests-37%20passed-brightgreen)
+![Tests](https://img.shields.io/badge/tests-46%20passed-brightgreen)
+[![CI](https://github.com/IgorLamakin/BonusCalcApp/actions/workflows/ci.yml/badge.svg)](https://github.com/IgorLamakin/BonusCalcApp/actions/workflows/ci.yml)
 
 ## Что умеет
 
